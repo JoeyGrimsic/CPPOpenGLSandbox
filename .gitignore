@@ -1,0 +1,37 @@
+# Build artifacts
+build/
+bin/
+obj/  # If using this instead of 'object/'
+object/
+
+# Dependency directories
+deps/
+
+# Compiled object files
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.lib
+*.a
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.suo
+*.user
+*.VC.db
+
+# Logs and Temporary Files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# CMake and Premake-generated files
+CMakeFiles/
+CMakeCache.txt
+Makefile
+premake5.lua.bak
+compile_commands.json
