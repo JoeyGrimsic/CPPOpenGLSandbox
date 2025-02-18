@@ -1,3 +1,4 @@
+require("./export-compile-commands")
 workspace("OpenGLSandbox")
 configurations({ "Debug", "Release" })
 platforms({ "x64" })
@@ -9,11 +10,10 @@ cppdialect("C++17")
 targetdir("bin/%{cfg.buildcfg}")
 
 files({
-	"main.cpp", -- Explicit main file
-	"src/glad.c", -- Corrected path to glad.c
-	"libs/stb/stb_image.h",
-	"src/**.cpp", -- Keep for future source files
-	"src/**.h", -- Keep for future headers
+	"main.cpp", -- here we are explicitly including the entry-point cpp
+	"libs/stb/stb_image.h", -- as well as
+	"src/**.cpp",
+	"src/**.h",
 })
 
 includedirs({

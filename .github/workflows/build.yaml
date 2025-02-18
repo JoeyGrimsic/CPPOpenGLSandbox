@@ -1,0 +1,94 @@
+name: Build OpenGL Sandbox
+
+on:
+  push:
+    branches:
+      - master  # You can change this to whatever branch you want to trigger the workflow
+  pull_request:
+    branches:
+      - master  # This will also trigger the workflow for PRs targeting the main branch
+
+# do i need to use runner.os to determine which jobs to run?
+jobs:
+  build-ubuntu:
+    name: Build on Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential clang cmake git
+
+    - name: Install Premake5
+      run: |
+        curl -L https://github.com/premake/premake-core/releases/download/v5.0.0-alpha16/premake5-linux.x86_64.tar.gz -o premake5.tar.gz
+        tar -xvzf premake5.tar.gz
+        sudo mv premake5 /usr/local/bin
+
+    - name: Generate project files with Premake5
+      run: premake5 gmake
+
+    - name: Build the project
+      run: make
+
+  build-arch:
+    name: Build on Arch
+    runs-on: arch-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up dependencies
+      run: |
+        sudo pacman -Syu
+        sudo pacman -S clang cmake git premake5 # premake5 should be good to install using pacman
+
+    - name: Generate project files with Premake5
+      run: premake5 gmake
+
+    - name: Build the project
+      run: make
+
+  build-windows:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up dependencies
+      run: |
+        choco install mingw
+        choco install premake
+
+    - name: Generate project files with Premake5
+      run: premake5 vs2022
+
+    - name: Build the project
+      run: |
+        msbuild ./build/vs2022/YourProject.sln /p:Configuration=Release
+
+  build-macos:
+    name: Build on macOS
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Homebrew and dependencies
+      run: |
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        brew install premake
+
+    - name: Generate project files with Premake5
+      run: premake5 gmake
+
+    - name: Build the project
+      run: make
